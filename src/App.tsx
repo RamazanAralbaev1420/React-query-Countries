@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Header from './components/Header';
@@ -10,23 +11,23 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-
-import { IconChevronDown } from '@tabler/icons-react';
 import { ICountries } from './types/types';
 import { Link } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-const App = () => {
-  const [searchText, setSearchHandle] = useState('');
-  const [val, setVal] = useState('All');
 
+
+const App = () => {
+  const [searchText, setSearchHandle] = React.useState('');
+  const [val, setVal] = React.useState('All');
   const handleChange = (event: SelectChangeEvent) => {
     setVal(event.target.value as string);
   };
 
-  console.log(val);
 
+
+
+  
   const { data, isError, isLoading } = useQuery({
-    queryKey: ['countries'],
+    queryKey: ['countries', val],
     queryFn: () => {
       return axios
         .get(
@@ -38,9 +39,6 @@ const App = () => {
     },
   });
 
-  useEffect(() => {
-    console.log('useEffect');
-  }, [val]);
 
   if (isLoading) {
     return <h1>Loading...</h1>;
@@ -69,7 +67,7 @@ const App = () => {
                 id="demo-simple-select"
                 value={val}
                 label="All"
-                onChange={handleChange}
+                onChange={(e) => setVal(e.target.value)}
               >
                 <MenuItem value="All">All</MenuItem>
                 <MenuItem value="America">America</MenuItem>

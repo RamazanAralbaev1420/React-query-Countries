@@ -6,7 +6,7 @@ import { useNavigate, useParams } from 'react-router';
 
 const SingleCountry = () => {
   const { cca3 } = useParams();
-  const [data, setData] = useState('');
+  // const [data, setData] = useState('');
   const navigate = useNavigate();
 
   const backPageHandler = () => {
@@ -17,28 +17,21 @@ const SingleCountry = () => {
     navigate(`/${border}`);
   };
 
-  // const { data, isLoading, isSuccess } = useQuery({
-  //   queryKey: ['data'],
-  //   queryFn: () => {
-  //     return axios
-  //       .get(`https://restcountries.com/v3.1/alpha?codes=${cca3}`)
-  //       .then((res) => (res.data[0]));
-  //   },
-  // });
+  const { data, isLoading, isSuccess } = useQuery({
+    queryKey: ['data', cca3],
+    queryFn: () => {
+      return axios
+        .get(`https://restcountries.com/v3.1/alpha?codes=${cca3}`)
+        .then((res) => res.data[0]);
+    },
+  });
 
-  useEffect(() => {
-    fetch(`https://restcountries.com/v3.1/alpha?codes=${cca3}`)
-      .then((res) => res.json())
-      .then((data) => setData(data[0]));
-  }, [cca3]);
-  console.log(data);
 
-  console.log(data);
+  if(isLoading) {
+    <h1>Loading...</h1>
+  }
 
-  // if (isLoading) {
-  //   <h1>Loading...</h1>;
-  // }
-  if (data) {
+  if (data && isSuccess) {
     return (
       <div>
         <div className="container">
